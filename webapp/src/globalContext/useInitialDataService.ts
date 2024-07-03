@@ -34,6 +34,21 @@ export const useInitialDataService = () => {
     },
   });
 
+  const [userTasks, setUserTasks] = useState(0);
+  const userTasksLoadable = useApiQuery({
+    url: '/v2/user-tasks',
+    method: 'get',
+    query: { size: 1, filterState: ['NEW', 'IN_PROGRESS'] },
+    options: {
+      enabled: Boolean(initialDataLoadable.data?.userInfo),
+      refetchInterval: 60_000,
+    },
+  });
+
+  useEffect(() => {
+    setUserTasks(userTasksLoadable.data?.page?.totalElements ?? 0);
+  }, [userTasksLoadable.data]);
+
   const [announcement, setAnnouncement] = useState<AnnouncementDto | undefined>(
     initialDataLoadable.data?.announcement
   );
@@ -198,6 +213,7 @@ export const useInitialDataService = () => {
           : undefined,
         announcement,
         isFetching,
+        userTasks,
       }
     : undefined;
 
@@ -211,6 +227,7 @@ export const useInitialDataService = () => {
       completeGuideStep,
       finishGuide,
       setQuickStartOpen,
+      setUserTasks,
     },
   };
 };
