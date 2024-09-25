@@ -98,10 +98,13 @@ const StyledTags = styled('div')`
   min-height: 28px;
 `;
 
-const StyledBolt = styled(Zap)`
+const StyledContextButton = styled(Box)`
   position: absolute;
   bottom: 12px;
   left: 12px;
+`;
+
+const StyledBolt = styled(Zap)`
   width: 14px;
   height: 14px;
 `;
@@ -221,11 +224,14 @@ export const CellKey: React.FC<Props> = ({
             </>
           )}
           {data.contextPresent && (
-            <Box role="button" onClick={() => handleOpen('context')}>
-              <Tooltip title={t('key-context-present-hint')}>
+            <Tooltip title={t('key-context-present-hint')}>
+              <StyledContextButton
+                role="button"
+                onClick={() => handleOpen('context')}
+              >
                 <StyledBolt />
-              </Tooltip>
-            </Box>
+              </StyledContextButton>
+            </Tooltip>
           )}
         </>
 
