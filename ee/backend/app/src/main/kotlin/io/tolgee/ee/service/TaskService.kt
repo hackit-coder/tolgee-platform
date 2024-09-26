@@ -45,6 +45,7 @@ class TaskService(
   @Lazy
   @Autowired
   private val taskService: TaskService,
+  private val assigneeNotificationService: AssigneeNotificationService,
 ) : TaskServiceInterface {
   fun getAllPaged(
     project: Project,
@@ -98,6 +99,9 @@ class TaskService(
       try {
         val task = taskService.createTaskInTransaction(project, dto, filters)
         entityManager.flush()
+        task.assignees.forEach {
+          assigneeNotificationService.notifyNewAssignee(it, task)
+        }
         return getTasksWithScope(listOf(task)).first()
       } catch (e: DataIntegrityViolationException) {
         lastErr = e
@@ -177,7 +181,13 @@ class TaskService(
     }
 
     dto.assignees?.let {
-      task.assignees = checkAssignees(dto.assignees!!, projectEntity)
+      val newAssignees = checkAssignees(dto.assignees!!, projectEntity)
+      newAssignees.forEach {
+        if (!task.assignees.contains(it)) {
+          assigneeNotificationService.notifyNewAssignee(it, task)
+        }
+      }
+      task.assignees = newAssignees
     }
 
     taskRepository.saveAndFlush(task)
