@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.tolgee.activity.RequestActivity
 import io.tolgee.activity.data.ActivityType
+import io.tolgee.component.enabledFeaturesProvider.EnabledFeaturesProvider
 import io.tolgee.constants.Feature
 import io.tolgee.dtos.request.task.*
 import io.tolgee.dtos.request.userAccount.UserAccountPermissionsFilters
@@ -60,7 +61,7 @@ class TaskController(
   private val pagedUserResourcesAssembler: PagedResourcesAssembler<UserAccount>,
   private val taskPerUserReportModelAssembler: TaskPerUserReportModelAssembler,
   private val securityService: SecurityService,
-  private val enabledFeaturesProvider: PublicEnabledFeaturesProvider,
+  private val enabledFeaturesProvider: EnabledFeaturesProvider,
 ) {
   @GetMapping("")
   @Operation(summary = "Get tasks")
