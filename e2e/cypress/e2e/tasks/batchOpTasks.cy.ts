@@ -6,6 +6,7 @@ import {
   selectAll,
   selectOperation,
 } from '../../common/batchOperations';
+import { HOST } from '../../common/constants';
 import { waitForGlobalLoading } from '../../common/loading';
 import { assertMessage, dismissMenu } from '../../common/shared';
 import {
@@ -15,6 +16,7 @@ import {
 
 describe('Tasks from batch operations view', () => {
   const user = 'Tasks test user';
+  let projectId = 0;
   beforeEach(() => {
     tasks.clean({ failOnStatusCode: false });
     tasks
@@ -26,6 +28,7 @@ describe('Tasks from batch operations view', () => {
           ({ name }) => name === 'Project with tasks'
         );
         visitTranslations(testProject.id);
+        projectId = testProject.id;
       });
     waitForGlobalLoading();
   });
@@ -98,5 +101,13 @@ describe('Tasks from batch operations view', () => {
     assertMessage('Keys removed from task');
 
     cy.gcy('global-empty-list').should('be.visible');
+  });
+
+  it('link to task works', () => {
+    cy.visit(`${HOST}/projects/${projectId}/task?number=1&detail=true`);
+    cy.gcy('task-detail')
+      .should('be.visible')
+      .findDcy('task-label-name')
+      .should('contain', 'Translate task');
   });
 });

@@ -105,7 +105,7 @@ export const TaskDetail = ({ onClose, projectId, taskNumber }: Props) => {
   const data = taskLoadable.data;
 
   return (
-    <>
+    <Box data-cy="task-detail">
       <StyledMainTitle>
         <T keyName="task_detail_title" />
       </StyledMainTitle>
@@ -267,6 +267,6 @@ export const TaskDetail = ({ onClose, projectId, taskNumber }: Props) => {
           </Formik>
         </>
       )}
-    </>
+    </Box>
   );
 };

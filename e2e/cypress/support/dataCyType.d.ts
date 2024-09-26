@@ -483,6 +483,7 @@ declare namespace DataCy {
         "tag-autocomplete-input" |
         "tag-autocomplete-option" |
         "task-date-picker" |
+        "task-detail" |
         "task-detail-author" |
         "task-detail-characters" |
         "task-detail-closed-at" |
