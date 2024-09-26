@@ -31,7 +31,7 @@ const StyledSpaced = styled('div')`
 `;
 
 const StyledTranslationsSearchField = styled(HeaderSearchField)`
-  min-width: 200px;
+  width: 200px;
 `;
 
 const StyledToggleButton = styled(Button)`
