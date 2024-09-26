@@ -12,27 +12,34 @@ type TaskModel = components['schemas']['TaskModel'];
 export const TaskRedirect = () => {
   const project = useProject();
   const history = useHistory();
-  const [task] = useUrlSearchState('task', {
+  const [taskNum] = useUrlSearchState('number', {
     defaultVal: undefined,
   });
+  const [detail] = useUrlSearchState('detail');
 
   const getLinkToTask = (task: TaskModel) => {
     const languages = new Set([project.baseLanguage!.tag, task.language.tag]);
 
-    return (
-      `${LINKS.PROJECT_TRANSLATIONS.build({
-        [PARAMS.PROJECT_ID]: project.id,
-      })}?task=${task.number}&` +
+    let url = `${LINKS.PROJECT_TRANSLATIONS.build({
+      [PARAMS.PROJECT_ID]: project.id,
+    })}?task=${task.number}`;
+
+    if (detail === 'true') {
+      url += `&taskDetail=${task.number}`;
+    }
+
+    url +=
+      '&' +
       Array.from(languages)
         .map((l) => `languages=${l}`)
-        .join('&')
-    );
+        .join('&');
+    return url;
   };
 
   const taskLoadable = useApiQuery({
     url: '/v2/projects/{projectId}/tasks/{taskNumber}',
     method: 'get',
-    path: { projectId: project.id, taskNumber: Number(task) },
+    path: { projectId: project.id, taskNumber: Number(taskNum) },
   });
 
   useEffect(() => {

@@ -11,7 +11,7 @@ export const getTaskRedirect = (
 ) => {
   return `${LINKS.GO_TO_PROJECT_TASK.build({
     [PARAMS.PROJECT_ID]: project.id,
-  })}?task=${taskNumber}`;
+  })}?number=${taskNumber}`;
 };
 
 function toFileName(label: string) {

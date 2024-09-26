@@ -360,7 +360,7 @@ export class LINKS {
     'activity-detail'
   );
 
-  static GO_TO_PROJECT_TASK = Link.ofParent(LINKS.PROJECT, 'task-redirect');
+  static GO_TO_PROJECT_TASK = Link.ofParent(LINKS.PROJECT, 'task');
 
   /**
    * Slack

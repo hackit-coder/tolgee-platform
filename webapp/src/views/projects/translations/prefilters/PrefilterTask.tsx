@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { T, useTranslate } from '@tolgee/react';
-import {
-  Box,
-  Dialog,
-  IconButton,
-  styled,
-  Tooltip,
-  useTheme,
-} from '@mui/material';
+import { Box, IconButton, styled, Tooltip, useTheme } from '@mui/material';
 import { AlertTriangle } from '@untitled-ui/icons-react';
 import { Link } from 'react-router-dom';
 
@@ -17,9 +10,9 @@ import { TaskDetail as TaskDetailIcon } from 'tg.component/CustomIcons';
 import { TaskLabel } from 'tg.ee/task/components/TaskLabel';
 import { TaskTooltip } from 'tg.ee/task/components/TaskTooltip';
 import { getTaskRedirect } from 'tg.ee/task/components/utils';
-import { TaskDetail } from 'tg.ee/task/components/TaskDetail';
 
 import { PrefilterContainer } from './ContainerPrefilter';
+import { useUrlSearchState } from 'tg.hooks/useUrlSearchState';
 
 const StyledWarning = styled('div')`
   display: flex;
@@ -41,7 +34,6 @@ type Props = {
 export const PrefilterTask = ({ taskNumber }: Props) => {
   const project = useProject();
   const theme = useTheme();
-  const [showDetails, setShowDetails] = useState(false);
   const { t } = useTranslate();
 
   const { data } = useApiQuery({
@@ -56,16 +48,16 @@ export const PrefilterTask = ({ taskNumber }: Props) => {
     path: { projectId: project.id, taskNumber },
   });
 
+  const [_, setTaskDetail] = useUrlSearchState('taskDetail');
+
   if (!data) {
     return null;
   }
 
   function handleShowDetails() {
-    setShowDetails(true);
+    setTaskDetail(String(taskNumber));
   }
-  function handleDetailClose() {
-    setShowDetails(false);
-  }
+
   return (
     <>
       <PrefilterContainer
@@ -103,15 +95,6 @@ export const PrefilterTask = ({ taskNumber }: Props) => {
           </Box>
         }
       />
-      {showDetails && (
-        <Dialog open={true} onClose={handleDetailClose} maxWidth="xl">
-          <TaskDetail
-            task={data}
-            onClose={handleDetailClose}
-            projectId={project.id}
-          />
-        </Dialog>
-      )}
     </>
   );
 };

@@ -16,7 +16,6 @@ import { useApiMutation, useApiQuery } from 'tg.service/http/useQueryApi';
 import { TextField } from 'tg.component/common/form/fields/TextField';
 import LoadingButton from 'tg.component/common/form/LoadingButton';
 import { Validation } from 'tg.constants/GlobalValidationSchema';
-import { components } from 'tg.service/apiSchema.generated';
 
 import { TaskDatePicker } from './TaskDatePicker';
 import { AssigneeSearchSelect } from './assigneeSelect/AssigneeSearchSelect';
@@ -29,8 +28,6 @@ import { UserAccount } from 'tg.component/UserAccount';
 import { getTaskRedirect, useTaskReport } from './utils';
 import { Scope } from 'tg.fixtures/permissions';
 import { ProjectWithAvatar } from 'tg.component/ProjectWithAvatar';
-
-type TaskModel = components['schemas']['TaskModel'];
 
 const StyledMainTitle = styled(DialogTitle)`
   padding-bottom: 0px;
@@ -64,26 +61,26 @@ const StyledActions = styled('div')`
 `;
 
 type Props = {
-  task: TaskModel;
+  taskNumber: number;
   onClose: () => void;
   projectId: number;
   projectScopes?: Scope[];
 };
 
-export const TaskDetail = ({ task, onClose, projectId }: Props) => {
+export const TaskDetail = ({ onClose, projectId, taskNumber }: Props) => {
   const { t } = useTranslate();
   const formatDate = useDateFormatter();
 
   const taskLoadable = useApiQuery({
     url: '/v2/projects/{projectId}/tasks/{taskNumber}',
     method: 'get',
-    path: { projectId, taskNumber: task.number },
+    path: { projectId, taskNumber },
   });
 
   const perUserReportLoadable = useApiQuery({
     url: '/v2/projects/{projectId}/tasks/{taskNumber}/per-user-report',
     method: 'get',
-    path: { projectId, taskNumber: task.number },
+    path: { projectId, taskNumber },
   });
 
   const updateLoadable = useApiMutation({
@@ -105,7 +102,7 @@ export const TaskDetail = ({ task, onClose, projectId }: Props) => {
 
   const { downloadReport } = useTaskReport();
 
-  const data = taskLoadable.data ?? task;
+  const data = taskLoadable.data;
 
   return (
     <>
@@ -129,7 +126,7 @@ export const TaskDetail = ({ task, onClose, projectId }: Props) => {
             onSubmit={(values) => {
               updateLoadable.mutate(
                 {
-                  path: { projectId, taskNumber: task.number },
+                  path: { projectId, taskNumber },
                   content: {
                     'application/json': {
                       name: values.name,

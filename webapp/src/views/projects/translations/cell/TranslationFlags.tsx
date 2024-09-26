@@ -187,7 +187,7 @@ export const TranslationFlags: React.FC<Props> = ({
             onClick={stopAndPrevent()}
           >
             <TaskDetail
-              task={taskDetailData}
+              taskNumber={taskDetailData.number}
               onClose={() => setTaskDetailData(undefined)}
               projectId={project.id}
             />

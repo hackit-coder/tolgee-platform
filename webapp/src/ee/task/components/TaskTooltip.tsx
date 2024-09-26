@@ -103,7 +103,7 @@ export const TaskTooltip = ({
           onClick={stopAndPrevent()}
         >
           <TaskDetail
-            task={taskDetailData}
+            taskNumber={taskDetailData.number}
             onClose={() => setTaskDetailData(undefined)}
             projectId={project.id}
           />
