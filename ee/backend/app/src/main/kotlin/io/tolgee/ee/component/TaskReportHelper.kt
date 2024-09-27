@@ -118,10 +118,8 @@ class TaskReportHelper(
       row.createCell(3).setCellValue(taskReport.baseCharacterCount.toDouble())
     }
 
-    // Auto-size all columns for better readability
-    for (i in 0..3) {
-      sheet.autoSizeColumn(i)
-    }
+    sheet.setColumnWidth(0, 4000)
+    sheet.setColumnWidth(1, 3000)
 
     return workbook
   }
