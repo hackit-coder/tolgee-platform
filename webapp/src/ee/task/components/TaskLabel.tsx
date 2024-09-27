@@ -13,6 +13,7 @@ const StyledContainer = styled(Box)`
   align-items: center;
   justify-content: start;
   gap: 8px;
+  font-size: 16px;
 `;
 
 const StyledTaskName = styled(Box)`

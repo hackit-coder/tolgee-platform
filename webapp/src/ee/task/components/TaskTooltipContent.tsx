@@ -87,7 +87,12 @@ export const TaskTooltipContent = ({
             <TaskLabel task={task.data} />
             {actions && (
               <Box
-                sx={{ display: 'flex', gap: 0.5 }}
+                sx={{
+                  display: 'flex',
+                  gap: 0.5,
+                  margin: '-2px 0px',
+                  alignItems: 'center',
+                }}
                 onClick={stopAndPrevent()}
               >
                 {typeof actions === 'function' ? actions(task.data) : actions}

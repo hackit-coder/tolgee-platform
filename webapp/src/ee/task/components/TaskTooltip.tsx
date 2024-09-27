@@ -49,7 +49,7 @@ export const TaskTooltip = ({
                 to={getTaskRedirect(project, task.number)}
                 size="small"
               >
-                <Translate01 />
+                <Translate01 width={20} height={20} />
               </IconButton>
             </Tooltip>
           )}
@@ -64,7 +64,7 @@ export const TaskTooltip = ({
                 size="small"
                 onClick={() => setTaskDetailData(task)}
               >
-                <TaskDetailIcon />
+                <TaskDetailIcon width={20} height={20} />
               </IconButton>
             </Tooltip>
           )}
