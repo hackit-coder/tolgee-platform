@@ -36,16 +36,16 @@ class TaskControllerAssigneesTest : ProjectAuthControllerTest("/v2/projects/") {
       "tasks/possible-assignees?filterMinimalScope=TRANSLATIONS_VIEW",
     ).andIsOk.andAssertThatJson {
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Project view scope user (en)")
+        (it as JsonMap).get("name").assert.isEqualTo("Project view scope user (en)")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Project view role user (en)")
+        (it as JsonMap).get("name").assert.isEqualTo("Project view role user (en)")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Organization member")
+        (it as JsonMap).get("name").assert.isEqualTo("Organization member")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Organization owner")
+        (it as JsonMap).get("name").assert.isEqualTo("Organization owner")
       }
     }
   }
@@ -57,16 +57,16 @@ class TaskControllerAssigneesTest : ProjectAuthControllerTest("/v2/projects/") {
       "tasks/possible-assignees?filterMinimalScope=TRANSLATIONS_EDIT",
     ).andIsOk.andAssertThatJson {
       node("_embedded.users").isArray.allSatisfy {
-        (it as JsonMap).get("username").assert.isNotEqualTo("Project view scope user (en)")
+        (it as JsonMap).get("name").assert.isNotEqualTo("Project view scope user (en)")
       }
       node("_embedded.users").isArray.allSatisfy {
-        (it as JsonMap).get("username").assert.isNotEqualTo("Project view role user (en)")
+        (it as JsonMap).get("name").assert.isNotEqualTo("Project view role user (en)")
       }
       node("_embedded.users").isArray.allSatisfy {
-        (it as JsonMap).get("username").assert.isNotEqualTo("Organization member")
+        (it as JsonMap).get("name").assert.isNotEqualTo("Organization member")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Organization owner")
+        (it as JsonMap).get("name").assert.isEqualTo("Organization owner")
       }
     }
   }
@@ -78,16 +78,16 @@ class TaskControllerAssigneesTest : ProjectAuthControllerTest("/v2/projects/") {
       "tasks/possible-assignees?filterMinimalScope=TRANSLATIONS_VIEW&filterViewLanguageId=${testData.czechLanguage.id}",
     ).andIsOk.andAssertThatJson {
       node("_embedded.users").isArray.allSatisfy {
-        (it as JsonMap).get("username").assert.isNotEqualTo("Project view scope user (en)")
+        (it as JsonMap).get("name").assert.isNotEqualTo("Project view scope user (en)")
       }
       node("_embedded.users").isArray.allSatisfy {
-        (it as JsonMap).get("username").assert.isNotEqualTo("Project view role user (en)")
+        (it as JsonMap).get("name").assert.isNotEqualTo("Project view role user (en)")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Organization member")
+        (it as JsonMap).get("name").assert.isEqualTo("Organization member")
       }
       node("_embedded.users").isArray.anySatisfy {
-        (it as JsonMap).get("username").assert.isEqualTo("Organization owner")
+        (it as JsonMap).get("name").assert.isEqualTo("Organization owner")
       }
     }
   }
