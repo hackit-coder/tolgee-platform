@@ -17,7 +17,6 @@ import {
 import { PrefilterContainer } from './ContainerPrefilter';
 import { useUrlSearchState } from 'tg.hooks/useUrlSearchState';
 import { useUser } from 'tg.globalContext/helpers';
-import { useTaskStateTranslation } from 'tg.translationTools/useTaskStateTranslation';
 import { TaskState } from 'tg.ee/task/components/TaskState';
 
 const StyledWarning = styled('div')`
@@ -42,7 +41,6 @@ export const PrefilterTask = ({ taskNumber }: Props) => {
   const theme = useTheme();
   const { t } = useTranslate();
   const currentUser = useUser();
-  const translateTaskState = useTaskStateTranslation();
 
   const { data } = useApiQuery({
     url: '/v2/projects/{projectId}/tasks/{taskNumber}',
