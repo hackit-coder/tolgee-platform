@@ -7,6 +7,7 @@ import { TaskLabel } from 'tg.ee/task/components/TaskLabel';
 
 import { PanelContentData, PanelContentProps } from '../../common/types';
 import { TabMessage } from '../../common/TabMessage';
+import { TASK_ACTIVE_STATES } from 'tg.ee/task/components/utils';
 
 const StyledContainer = styled('div')`
   display: flex;
@@ -29,7 +30,7 @@ export const Tasks: React.FC<PanelContentProps> = ({
     query: {
       filterKey: [keyData.keyId],
       filterLanguage: [language.id],
-      filterState: ['IN_PROGRESS', 'NEW'],
+      filterState: TASK_ACTIVE_STATES,
       sort: ['type,desc', 'id,desc'],
     },
   });

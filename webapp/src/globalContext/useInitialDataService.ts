@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useApiMutation, useApiQuery } from 'tg.service/http/useQueryApi';
 import { components } from 'tg.service/apiSchema.generated';
 import { useTolgee } from '@tolgee/react';
+import { TASK_ACTIVE_STATES } from 'tg.ee/task/components/utils';
 
 type PrivateOrganizationModel =
   components['schemas']['PrivateOrganizationModel'];
@@ -38,7 +39,7 @@ export const useInitialDataService = () => {
   const userTasksLoadable = useApiQuery({
     url: '/v2/user-tasks',
     method: 'get',
-    query: { size: 1, filterState: ['NEW', 'IN_PROGRESS'] },
+    query: { size: 1, filterState: TASK_ACTIVE_STATES },
     options: {
       enabled: Boolean(initialDataLoadable.data?.userInfo),
       refetchInterval: 60_000,

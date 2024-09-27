@@ -3,7 +3,8 @@ import { components } from 'tg.service/apiSchema.generated';
 import { useApiMutation } from 'tg.service/http/useQueryApi';
 
 type SimpleProjectModel = components['schemas']['SimpleProjectModel'];
-type TaskModel = components['schemas']['TaskModel'];
+export type TaskModel = components['schemas']['TaskModel'];
+export type TaskState = TaskModel['state'];
 
 export const getTaskRedirect = (
   project: SimpleProjectModel,
@@ -20,7 +21,7 @@ function toFileName(label: string) {
 
 export const useTaskReport = () => {
   const reportMutation = useApiMutation({
-    url: '/v2/projects/{projectId}/tasks/{taskNumber}/csv-report',
+    url: '/v2/projects/{projectId}/tasks/{taskNumber}/xlsx-report',
     method: 'get',
     fetchOptions: {
       rawResponse: true,
@@ -47,3 +48,5 @@ export const useTaskReport = () => {
   }
   return { downloadReport, isLoading: reportMutation.isLoading };
 };
+
+export const TASK_ACTIVE_STATES = ['NEW', 'IN_PROGRESS'] as TaskState[];

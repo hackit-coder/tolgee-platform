@@ -8,6 +8,7 @@ import { SetTaskTranslationState } from '../types';
 import { useTranslationsService } from './useTranslationsService';
 import { confirmation } from 'tg.hooks/confirmation';
 import { T } from '@tolgee/react';
+import { messageService } from 'tg.service/MessageService';
 
 type Props = {
   translations: ReturnType<typeof useTranslationsService>;
@@ -66,6 +67,9 @@ export const useTaskService = ({ translations }: Props) => {
                 handleFinishTask(data.taskNumber).then(() => {
                   translations.refetchTranslations();
                 });
+                messageService.success(
+                  <T keyName="task_finished_confirmation_success" />
+                );
               },
             });
           }

@@ -9,10 +9,16 @@ import { useProject } from 'tg.hooks/useProject';
 import { TaskDetail as TaskDetailIcon } from 'tg.component/CustomIcons';
 import { TaskLabel } from 'tg.ee/task/components/TaskLabel';
 import { TaskTooltip } from 'tg.ee/task/components/TaskTooltip';
-import { getTaskRedirect } from 'tg.ee/task/components/utils';
+import {
+  getTaskRedirect,
+  TASK_ACTIVE_STATES,
+} from 'tg.ee/task/components/utils';
 
 import { PrefilterContainer } from './ContainerPrefilter';
 import { useUrlSearchState } from 'tg.hooks/useUrlSearchState';
+import { useUser } from 'tg.globalContext/helpers';
+import { useTaskStateTranslation } from 'tg.translationTools/useTaskStateTranslation';
+import { TaskState } from 'tg.ee/task/components/TaskState';
 
 const StyledWarning = styled('div')`
   display: flex;
@@ -35,6 +41,8 @@ export const PrefilterTask = ({ taskNumber }: Props) => {
   const project = useProject();
   const theme = useTheme();
   const { t } = useTranslate();
+  const currentUser = useUser();
+  const translateTaskState = useTaskStateTranslation();
 
   const { data } = useApiQuery({
     url: '/v2/projects/{projectId}/tasks/{taskNumber}',
@@ -58,38 +66,53 @@ export const PrefilterTask = ({ taskNumber }: Props) => {
     setTaskDetail(String(taskNumber));
   }
 
+  let alert: React.ReactNode | null = null;
+
+  const isActive = TASK_ACTIVE_STATES.includes(data.state);
+
+  if (isActive) {
+    if (!data.assignees.find((u) => u.id === currentUser?.id)) {
+      alert = <T keyName="task_filter_indicator_user_not_assigned" />;
+    } else if (blockingTasksLoadable.data?.length) {
+      alert = (
+        <>
+          <T keyName="task_filter_indicator_blocking_warning" />{' '}
+          {blockingTasksLoadable.data.map((taskNumber, i) => (
+            <React.Fragment key={taskNumber}>
+              <TaskTooltip taskNumber={taskNumber} project={project}>
+                <StyledTaskId to={getTaskRedirect(project, taskNumber)}>
+                  #{taskNumber}
+                </StyledTaskId>
+              </TaskTooltip>
+              {i !== blockingTasksLoadable.data.length - 1 && ', '}
+            </React.Fragment>
+          ))}
+        </>
+      );
+    }
+  }
+
   return (
     <>
       <PrefilterContainer
         title={<T keyName="task_filter_indicator_label" />}
         content={
-          <Box display="flex" gap={1}>
+          <Box display="flex" gap={1} alignItems="center">
             <TaskLabel task={data} />
             <Tooltip title={t('task_detail_tooltip')} disableInteractive>
               <IconButton size="small" onClick={handleShowDetails}>
                 <TaskDetailIcon width={20} height={20} />
               </IconButton>
             </Tooltip>
-            {blockingTasksLoadable.data?.length ? (
+            {!isActive && <TaskState state={data.state} />}
+            {alert ? (
               <StyledWarning>
                 <AlertTriangle
                   width={18}
                   height={18}
                   color={theme.palette.warning.main}
                 />
-                <Box>
-                  <T keyName="task_filter_indicator_blocking_warning" />{' '}
-                  {blockingTasksLoadable.data.map((taskNumber, i) => (
-                    <React.Fragment key={taskNumber}>
-                      <TaskTooltip taskNumber={taskNumber} project={project}>
-                        <StyledTaskId to={getTaskRedirect(project, taskNumber)}>
-                          #{taskNumber}
-                        </StyledTaskId>
-                      </TaskTooltip>
-                      {i !== blockingTasksLoadable.data.length - 1 && ', '}
-                    </React.Fragment>
-                  ))}
-                </Box>
+                <Box>{alert}</Box>
               </StyledWarning>
             ) : null}
           </Box>

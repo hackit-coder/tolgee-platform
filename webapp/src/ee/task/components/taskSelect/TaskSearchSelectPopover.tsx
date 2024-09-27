@@ -17,6 +17,7 @@ import { useApiInfiniteQuery } from 'tg.service/http/useQueryApi';
 import { SpinnerProgress } from 'tg.component/SpinnerProgress';
 import { TaskSearchSelectItem } from './TaskSearchSelectItem';
 import { Task } from './types';
+import { TASK_ACTIVE_STATES } from '../utils';
 
 type SimpleProjectModel = components['schemas']['SimpleProjectModel'];
 
@@ -85,7 +86,7 @@ export const TaskSearchSelectPopover: React.FC<Props> = ({
 
   const query = {
     search: search || undefined,
-    filterState: ['IN_PROGRESS', 'NEW'],
+    filterState: TASK_ACTIVE_STATES,
     size: 20,
     sort: ['name'],
   } as const satisfies operations['getTasks_1']['parameters']['query'];

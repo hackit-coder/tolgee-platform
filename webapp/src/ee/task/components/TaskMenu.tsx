@@ -8,7 +8,7 @@ import { Scope } from 'tg.fixtures/permissions';
 import { messageService } from 'tg.service/MessageService';
 import { useApiMutation, useApiQuery } from 'tg.service/http/useQueryApi';
 
-import { useTaskReport } from './utils';
+import { TASK_ACTIVE_STATES, useTaskReport } from './utils';
 import { InitialValues, TaskCreateDialog } from './taskCreate/TaskCreateDialog';
 import { useUser } from 'tg.globalContext/helpers';
 
@@ -187,7 +187,7 @@ export const TaskMenu = ({
   return (
     <>
       <Menu anchorEl={anchorEl} open={isOpen} onClose={onClose}>
-        {task.state === 'IN_PROGRESS' || task.state === 'NEW' ? (
+        {TASK_ACTIVE_STATES.includes(task.state) ? (
           <MenuItem
             onClick={handleMarkAsDone}
             disabled={task.doneItems !== task.totalItems || !canMarkAsDone}
@@ -199,7 +199,7 @@ export const TaskMenu = ({
             {t('task_menu_mark_as_in_progress')}
           </MenuItem>
         )}
-        {(task.state === 'IN_PROGRESS' || task.state === 'NEW') && (
+        {TASK_ACTIVE_STATES.includes(task.state) && (
           <MenuItem disabled={!canEditTask} onClick={handleClose}>
             {t('task_menu_close_task')}
           </MenuItem>

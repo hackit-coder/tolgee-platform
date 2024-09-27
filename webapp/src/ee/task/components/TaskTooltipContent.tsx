@@ -13,6 +13,7 @@ import { AlarmClock } from '@untitled-ui/icons-react';
 import { useDateFormatter } from 'tg.hooks/useLocale';
 import { BatchProgress } from 'tg.views/projects/translations/BatchOperations/OperationsSummary/BatchProgress';
 import { useUserName } from 'tg.component/common/UserName';
+import { TASK_ACTIVE_STATES } from './utils';
 
 type TaskModel = components['schemas']['TaskModel'];
 
@@ -113,8 +114,7 @@ export const TaskTooltipContent = ({
           <StyledProgress>
             <Box display="flex" gap={1} alignItems="center">
               <TaskState state={task.data.state} />
-              {(task.data.state === 'IN_PROGRESS' ||
-                task.data.state === 'NEW') && (
+              {TASK_ACTIVE_STATES.includes(task.data.state) && (
                 <Box display="flex" width={100} alignItems="center">
                   <BatchProgress
                     progress={task.data.doneItems}
