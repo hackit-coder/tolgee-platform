@@ -73,6 +73,7 @@ export interface paths {
     put: operations["revokePermission"];
   };
   "/v2/projects/{projectId}/tasks/{taskNumber}/keys/{keyId}": {
+    /** Mark key as done, which updates task progress. */
     put: operations["updateTaskKey"];
   };
   "/v2/projects/{projectId}/tasks/{taskNumber}/keys": {
@@ -602,11 +603,11 @@ export interface paths {
     /** Returns all used project namespaces. Response contains default (null) namespace if used. */
     get: operations["getUsedNamespaces"];
   };
+  "/v2/projects/{projectId}/tasks/{taskNumber}/xlsx-report": {
+    get: operations["getXlsxReport"];
+  };
   "/v2/projects/{projectId}/tasks/{taskNumber}/per-user-report": {
     get: operations["getPerUserReport"];
-  };
-  "/v2/projects/{projectId}/tasks/{taskNumber}/csv-report": {
-    get: operations["getCsvReport"];
   };
   "/v2/projects/{projectId}/tasks/{taskNumber}/blocking-tasks": {
     get: operations["getBlockingTasks"];
@@ -1165,29 +1166,6 @@ export interface components {
       /** @description The user's permission type. This field is null if uses granular permissions */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       /**
-       * @deprecated
-       * @description Deprecated (use translateLanguageIds).
-       *
-       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example 200001,200004
-       */
-      permittedLanguageIds?: number[];
-      /**
-       * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example 200001,200004
-       */
-      translateLanguageIds?: number[];
-      /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example 200001,200004
-       */
-      stateChangeLanguageIds?: number[];
-      /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example 200001,200004
-       */
-      viewLanguageIds?: number[];
-      /**
        * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
        * @example KEYS_EDIT,TRANSLATIONS_VIEW
        */
@@ -1221,6 +1199,29 @@ export interface components {
         | "tasks.view"
         | "tasks.edit"
       )[];
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example 200001,200004
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example 200001,200004
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example 200001,200004
+       */
+      stateChangeLanguageIds?: number[];
+      /**
+       * @deprecated
+       * @description Deprecated (use translateLanguageIds).
+       *
+       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
+       * @example 200001,200004
+       */
+      permittedLanguageIds?: number[];
     };
     LanguageModel: {
       /** Format: int64 */
@@ -1374,11 +1375,15 @@ export interface components {
       done: boolean;
     };
     UpdateTaskKeyResponse: {
+      /** @description Task key is marked as done */
       done: boolean;
+      /** @description Task progress is 100% */
       taskFinished: boolean;
     };
     UpdateTaskKeysRequest: {
+      /** @description Keys to add to task */
       addKeys?: number[];
+      /** @description Keys to remove from task */
       removeKeys?: number[];
     };
     UpdateTaskRequest: {
@@ -1806,8 +1811,8 @@ export interface components {
       secretKey?: string;
       endpoint: string;
       signingRegion: string;
-      contentStorageType?: "S3" | "AZURE";
       enabled?: boolean;
+      contentStorageType?: "S3" | "AZURE";
     };
     AzureContentStorageConfigModel: {
       containerName?: string;
@@ -2075,12 +2080,12 @@ export interface components {
       createNewKeys: boolean;
     };
     ImportSettingsModel: {
-      /** @description If true, key descriptions will be overridden by the import */
-      overrideKeyDescriptions: boolean;
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
       /** @description If false, only updates keys, skipping the creation of new keys */
       createNewKeys: boolean;
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
+      /** @description If true, key descriptions will be overridden by the import */
+      overrideKeyDescriptions: boolean;
     };
     TranslationCommentModel: {
       /**
@@ -2237,7 +2242,6 @@ export interface components {
     };
     RevealedPatModel: {
       token: string;
-      description: string;
       /** Format: int64 */
       id: number;
       /** Format: int64 */
@@ -2248,6 +2252,7 @@ export interface components {
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
     };
     SetOrganizationRoleDto: {
       roleType: "MEMBER" | "OWNER";
@@ -2384,19 +2389,19 @@ export interface components {
     RevealedApiKeyModel: {
       /** @description Resulting user's api key */
       key: string;
-      description: string;
       /** Format: int64 */
       id: number;
-      userFullName?: string;
-      username?: string;
+      scopes: string[];
+      /** Format: int64 */
+      projectId: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      /** Format: int64 */
-      projectId: number;
-      scopes: string[];
+      username?: string;
+      description: string;
       projectName: string;
+      userFullName?: string;
     };
     SuperTokenRequest: {
       /** @description Has to be provided when TOTP enabled */
@@ -2480,11 +2485,11 @@ export interface components {
     };
     KeysScopeView: {
       /** Format: int64 */
-      characterCount: number;
-      /** Format: int64 */
       wordCount: number;
       /** Format: int64 */
       keyCount: number;
+      /** Format: int64 */
+      characterCount: number;
     };
     GetKeysRequestDto: {
       keys: components["schemas"]["KeyDefinitionDto"][];
@@ -3548,22 +3553,22 @@ export interface components {
         | "TASKS"
       )[];
       quickStart?: components["schemas"]["QuickStartModel"];
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
       /** @example Beautiful organization */
       name: string;
       /** Format: int64 */
       id: number;
-      basePermissions: components["schemas"]["PermissionModel"];
+      avatar?: components["schemas"]["Avatar"];
+      /** @example btforg */
+      slug: string;
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
       /**
        * @description The role of currently authorized user.
        *
        * Can be null when user has direct access to one of the projects owned by the organization.
        */
       currentUserRole?: "MEMBER" | "OWNER";
-      avatar?: components["schemas"]["Avatar"];
-      /** @example btforg */
-      slug: string;
+      basePermissions: components["schemas"]["PermissionModel"];
     };
     PublicBillingConfigurationDTO: {
       enabled: boolean;
@@ -3624,9 +3629,9 @@ export interface components {
       defaultFileStructureTemplate: string;
     };
     DocItem: {
-      description?: string;
       name: string;
       displayName?: string;
+      description?: string;
     };
     PagedModelProjectModel: {
       _embedded?: {
@@ -3721,23 +3726,23 @@ export interface components {
       formalitySupported: boolean;
     };
     KeySearchResultView: {
-      description?: string;
       name: string;
       /** Format: int64 */
       id: number;
-      baseTranslation?: string;
-      namespace?: string;
       translation?: string;
+      namespace?: string;
+      description?: string;
+      baseTranslation?: string;
     };
     KeySearchSearchResultModel: {
       view?: components["schemas"]["KeySearchResultView"];
-      description?: string;
       name: string;
       /** Format: int64 */
       id: number;
-      baseTranslation?: string;
-      namespace?: string;
       translation?: string;
+      namespace?: string;
+      description?: string;
+      baseTranslation?: string;
     };
     PagedModelKeySearchSearchResultModel: {
       _embedded?: {
@@ -4303,7 +4308,6 @@ export interface components {
     };
     PatWithUserModel: {
       user: components["schemas"]["SimpleUserAccountModel"];
-      description: string;
       /** Format: int64 */
       id: number;
       /** Format: int64 */
@@ -4314,6 +4318,7 @@ export interface components {
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
     };
     PagedModelOrganizationModel: {
       _embedded?: {
@@ -4430,19 +4435,19 @@ export interface components {
        * @description Languages for which user has translate permission.
        */
       permittedLanguageIds?: number[];
-      description: string;
       /** Format: int64 */
       id: number;
-      userFullName?: string;
-      username?: string;
+      scopes: string[];
+      /** Format: int64 */
+      projectId: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      /** Format: int64 */
-      projectId: number;
-      scopes: string[];
+      username?: string;
+      description: string;
       projectName: string;
+      userFullName?: string;
     };
     PagedModelUserAccountModel: {
       _embedded?: {
@@ -5648,6 +5653,7 @@ export interface operations {
       };
     };
   };
+  /** Mark key as done, which updates task progress. */
   updateTaskKey: {
     parameters: {
       path: {
@@ -14436,7 +14442,7 @@ export interface operations {
       };
     };
   };
-  getPerUserReport: {
+  getXlsxReport: {
     parameters: {
       path: {
         taskNumber: number;
@@ -14447,7 +14453,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskPerUserReportModel"][];
+          "application/json": string;
         };
       };
       /** Bad Request */
@@ -14484,7 +14490,7 @@ export interface operations {
       };
     };
   };
-  getCsvReport: {
+  getPerUserReport: {
     parameters: {
       path: {
         taskNumber: number;
@@ -14495,7 +14501,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["TaskPerUserReportModel"][];
         };
       };
       /** Bad Request */

@@ -164,11 +164,11 @@ class TaskController(
     return result.map { taskPerUserReportModelAssembler.toModel(it) }
   }
 
-  @GetMapping("/{taskNumber}/csv-report")
+  @GetMapping("/{taskNumber}/xlsx-report")
   @Operation(summary = "Report who did what")
   @UseDefaultPermissions
   @AllowApiAccess
-  fun getCsvReport(
+  fun getXlsxReport(
     @PathVariable
     taskNumber: Long,
   ): ResponseEntity<ByteArrayResource> {
@@ -270,7 +270,10 @@ class TaskController(
   }
 
   @PutMapping("/{taskNumber}/keys/{keyId}")
-  @Operation(summary = "Update task key")
+  @Operation(
+    summary = "Update task key",
+    description = "Mark key as done, which updates task progress."
+  )
   // permissions checked inside
   @UseDefaultPermissions
   @AllowApiAccess
