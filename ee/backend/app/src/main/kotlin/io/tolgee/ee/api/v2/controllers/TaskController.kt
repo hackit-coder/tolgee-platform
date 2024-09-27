@@ -272,7 +272,7 @@ class TaskController(
   @PutMapping("/{taskNumber}/keys/{keyId}")
   @Operation(
     summary = "Update task key",
-    description = "Mark key as done, which updates task progress."
+    description = "Mark key as done, which updates task progress.",
   )
   // permissions checked inside
   @UseDefaultPermissions
