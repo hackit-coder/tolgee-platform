@@ -63,7 +63,6 @@ type Props = {
   onSelect: (value: Task | null) => void;
   anchorEl: HTMLElement;
   selected: Task | null;
-  ownedOnly?: boolean;
   project: SimpleProjectModel;
   sx?: SxProps;
   className?: string;
@@ -75,7 +74,6 @@ export const TaskSearchSelectPopover: React.FC<Props> = ({
   onSelect,
   anchorEl,
   selected,
-  ownedOnly,
   project,
   sx,
   className,
