@@ -10,7 +10,6 @@ import io.tolgee.dtos.request.task.*
 import io.tolgee.dtos.request.userAccount.UserAccountPermissionsFilters
 import io.tolgee.ee.api.v2.hateoas.assemblers.TaskModelAssembler
 import io.tolgee.ee.api.v2.hateoas.assemblers.TaskPerUserReportModelAssembler
-import io.tolgee.ee.component.PublicEnabledFeaturesProvider
 import io.tolgee.ee.data.task.*
 import io.tolgee.ee.service.TaskService
 import io.tolgee.hateoas.task.TaskModel

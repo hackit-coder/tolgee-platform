@@ -14,8 +14,11 @@ import org.springframework.stereotype.Component
 class AssigneeNotificationService(
   private val tolgeeEmailSender: TolgeeEmailSender,
   private val frontendUrlProvider: FrontendUrlProvider,
-): Logging {
-  fun notifyNewAssignee(user: UserAccount, task: Task) {
+) : Logging {
+  fun notifyNewAssignee(
+    user: UserAccount,
+    task: Task,
+  ) {
     val url = "${frontendUrlProvider.url}/projects/${task.project.id}/task?number=${task.number}&detail=true"
 
     val params =
@@ -23,7 +26,7 @@ class AssigneeNotificationService(
         to = user.username,
         subject = "New task assignment",
         text =
-        """
+          """
           Hello! 👋<br/><br/>          
           You've been assigned to task <b>${task.name} #${task.number} (${task.language.name})</b>:<br/>
           <a href="$url">$url</a><br/><br/>
