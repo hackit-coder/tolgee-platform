@@ -54,7 +54,7 @@ export const ProjectSearchSelect: React.FC<Props> = ({
         <TextField
           variant="outlined"
           value={value.map((u) => u.name).join(', ')}
-          data-cy="assignee-select"
+          data-cy="project-select"
           minHeight={false}
           label={label}
           InputProps={{

@@ -30,7 +30,7 @@ class TaskTestData : BaseTestData("tasksTestUser", "Project with tasks") {
     projectUser = UserAccountBuilder(root)
 
     projectUser.self.apply {
-      username = "Project user"
+      username = "project.user@test.com"
       name = "Project user"
     }
     root.data.userAccounts.add(projectUser)
@@ -38,28 +38,28 @@ class TaskTestData : BaseTestData("tasksTestUser", "Project with tasks") {
     orgMember = UserAccountBuilder(root)
 
     orgMember.self.apply {
-      username = "Organization member"
+      username = "organization.member@test.com"
       name = "Organization member"
     }
 
     orgAdmin = UserAccountBuilder(root)
 
     orgAdmin.self.apply {
-      username = "Organization owner"
+      username = "organization.owner@test.com"
       name = "Organization owner"
     }
 
     projectViewScopeUser = UserAccountBuilder(root)
 
     projectViewScopeUser.self.apply {
-      username = "Project view scope user (en)"
+      username = "project.view.scope.user@test.com"
       name = "Project view scope user (en)"
     }
 
     projectViewRoleUser = UserAccountBuilder(root)
 
     projectViewRoleUser.self.apply {
-      username = "Project view role user (en)"
+      username = "project.view.role.user@test.com"
       name = "Project view role user (en)"
     }
 
