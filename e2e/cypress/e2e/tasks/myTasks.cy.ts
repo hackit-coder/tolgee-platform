@@ -127,6 +127,9 @@ describe('my tasks', () => {
       .findDcy('task-item-detail')
       .click();
     cy.gcy('task-detail-download-report').click();
+
+    cy.wait(1000);
+
     const fileName = 'review_task_report.xlsx';
     cy.verifyDownload(fileName);
 
