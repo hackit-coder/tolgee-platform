@@ -21,7 +21,6 @@ export const Tasks: React.FC<PanelContentProps> = ({
   setItemsCount,
   project,
 }) => {
-  const translation = keyData.translations[language.tag];
   const firstTask = keyData.tasks?.find((t) => t.languageId === language.id);
   const tasksLoadable = useApiQuery({
     url: '/v2/projects/{projectId}/tasks',
@@ -32,9 +31,6 @@ export const Tasks: React.FC<PanelContentProps> = ({
       filterLanguage: [language.id],
       filterState: ['IN_PROGRESS', 'NEW'],
       sort: ['type,desc', 'id,desc'],
-    },
-    options: {
-      enabled: Boolean(translation),
     },
   });
 
