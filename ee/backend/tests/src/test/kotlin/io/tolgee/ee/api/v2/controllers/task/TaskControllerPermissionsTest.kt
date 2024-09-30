@@ -51,7 +51,7 @@ class TaskControllerPermissionsTest : ProjectAuthControllerTest("/v2/projects/")
 
     performProjectAuthGet("tasks/${testData.translateTask.self.number}").andIsOk
     performProjectAuthGet("tasks/${testData.translateTask.self.number}/per-user-report").andIsOk
-    performProjectAuthGet("tasks/${testData.translateTask.self.number}/csv-report").andIsOk
+    performProjectAuthGet("tasks/${testData.translateTask.self.number}/xlsx-report").andIsOk
     performProjectAuthGet("tasks/${testData.translateTask.self.number}/keys").andIsOk
   }
 
@@ -91,7 +91,7 @@ class TaskControllerPermissionsTest : ProjectAuthControllerTest("/v2/projects/")
 
     performProjectAuthGet("tasks/${testData.reviewTask.self.number}").andIsForbidden
     performProjectAuthGet("tasks/${testData.reviewTask.self.number}/per-user-report").andIsForbidden
-    performProjectAuthGet("tasks/${testData.reviewTask.self.number}/csv-report").andIsForbidden
+    performProjectAuthGet("tasks/${testData.reviewTask.self.number}/xlsx-report").andIsForbidden
     performProjectAuthGet("tasks/${testData.reviewTask.self.number}/keys").andIsForbidden
     performProjectAuthPut(
       "tasks/${testData.reviewTask.self.number}/keys/${testData.keysInTask.first().self.id}",
