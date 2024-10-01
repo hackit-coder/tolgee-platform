@@ -8,7 +8,7 @@ import {
 } from '../../common/batchOperations';
 import { HOST } from '../../common/constants';
 import { waitForGlobalLoading } from '../../common/loading';
-import { assertMessage, dismissMenu } from '../../common/shared';
+import { assertMessage } from '../../common/shared';
 import {
   getTranslationCell,
   visitTranslations,
