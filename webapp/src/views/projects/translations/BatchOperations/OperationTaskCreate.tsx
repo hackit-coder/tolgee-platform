@@ -23,7 +23,7 @@ export const OperationTaskCreate = ({ disabled, onFinished }: Props) => {
 
   const languageAssignees = {} as Record<number, User[]>;
   const selectedLanguages = getPreselectedLanguagesIds(
-    allLanguages,
+    allLanguages.filter((l) => !l.base),
     translationsLanguages ?? []
   );
 

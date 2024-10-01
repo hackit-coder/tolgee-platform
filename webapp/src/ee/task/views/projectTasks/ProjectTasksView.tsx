@@ -164,6 +164,7 @@ export const ProjectTasksView = () => {
                 initialValues={{
                   languages: allLanguages
                     .filter((l) => languagesPreference.includes(l.tag))
+                    .filter((l) => !l.base)
                     .map((l) => l.id),
                 }}
                 projectId={project.id}

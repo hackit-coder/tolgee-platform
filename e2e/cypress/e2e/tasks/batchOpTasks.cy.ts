@@ -38,9 +38,6 @@ describe('Tasks from batch operations view', () => {
     selectOperation('Create task');
 
     cy.gcy('create-task-field-name').type('Brand new translate task');
-    cy.gcy('create-task-field-languages').click();
-    cy.gcy('create-task-field-languages-item').contains('English').click();
-    dismissMenu();
 
     cy.gcy('create-task-submit').click();
 
